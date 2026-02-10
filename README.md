@@ -1,138 +1,238 @@
-# BFHL API Project
+# BFHL REST API – Chitkara University
 
-A simple REST API built with Node.js and Express that handles mathematical operations and AI queries.
+A production-ready REST API built as part of the BFHL API Assessment, implementing multiple computational utilities and AI integration with Google Gemini, deployed on Vercel.
 
-## What it does
+This service exposes secure, publicly accessible endpoints with strict response formatting, robust validation, and graceful error handling.
 
-This API provides two main endpoints:
-- `/health` - Check if the server is running
-- `/bfhl` - Process requests for fibonacci sequences, prime numbers, LCM, HCF calculations, and AI questions
+## 📌 Live Deployment (Vercel)
 
-## Getting Started
-
-First, install the dependencies:
-
-```bash
-npm install
+**Base URL:**
+```
+https://<your-vercel-project>.vercel.app
 ```
 
-Then create a `.env` file in the root folder with these values:
+**Health Check:**
+```
+GET /health
+```
+
+**Core API:**
+```
+POST /bfhl
+```
+
+## 🛠 Tech Stack
+
+- **Runtime:** Node.js
+- **Framework:** Express.js
+- **Deployment:** Vercel
+- **AI Integration:** Google Gemini API
+- **Security:** Helmet, CORS, Environment Variables
+- **HTTP Client:** Axios
+
+## 📂 Project Structure
+
+```
+bfhl-api/
+│── server.js
+│── package.json
+│── .env        (not committed)
+│── README.md
+```
+
+## 🔐 Environment Variables
+
+Create a `.env` file in the root directory:
 
 ```
 PORT=3000
-OFFICIAL_EMAIL=aditya1679.be23@chitkara.edu.in
-GEMINI_API_KEY=your_api_key
+OFFICIAL_EMAIL=your_email@chitkara.edu.in
+GEMINI_API_KEY=your_google_gemini_api_key
 ```
 
-You can get a free Gemini API key from https://aistudio.google.com (just sign in with Google and click "Get API Key")
+⚠️ **Never commit .env to GitHub.**
 
-Start the server:
+## 📡 API Endpoints
 
-```bash
-npm start
-```
+### ✅ GET /health
 
-The server will run on http://localhost:3000
+Health check endpoint to verify service availability.
 
-## How to use
-
-### Check server health
-
-```bash
-curl http://localhost:3000/health
-```
-
-Returns:
+**Response:**
 ```json
 {
   "is_success": true,
-  "official_email": "aditya1679.be23@chitkara.edu.in"
+  "official_email": "your_email@chitkara.edu.in"
 }
 ```
 
-### Calculate Fibonacci sequence
+**HTTP Status:** `200 OK`
 
-Send a number to get the fibonacci sequence up to that length:
+### 🔁 POST /bfhl
 
-```bash
-curl -X POST http://localhost:3000/bfhl \
-  -H "Content-Type: application/json" \
-  -d '{"fibonacci": 7}'
+Processes exactly one operation per request.
+
+#### 🔢 Supported Operations
+
+| Key | Input Type | Output Type | Description |
+|-----|------------|-------------|-------------|
+| `fibonacci` | Integer | Integer Array | Fibonacci series |
+| `prime` | Integer Array | Integer Array | Prime numbers |
+| `lcm` | Integer Array | Integer | Least Common Multiple |
+| `hcf` | Integer Array | Integer | Highest Common Factor |
+| `AI` | String | Single-word String | AI response |
+
+## 📘 Request & Response Examples
+
+### Fibonacci
+
+**Request:**
+```json
+{
+  "fibonacci": 7
+}
 ```
 
-Returns: `[0, 1, 1, 2, 3, 5, 8]`
-
-### Filter prime numbers
-
-Send an array of numbers to get only the prime ones:
-
-```bash
-curl -X POST http://localhost:3000/bfhl \
-  -H "Content-Type: application/json" \
-  -d '{"prime": [2,4,7,9,11]}'
+**Response:**
+```json
+{
+  "is_success": true,
+  "official_email": "your_email@chitkara.edu.in",
+  "data": [0,1,1,2,3,5,8]
+}
 ```
 
-Returns: `[2, 7, 11]`
+### Prime Numbers
 
-### Find LCM (Least Common Multiple)
-
-```bash
-curl -X POST http://localhost:3000/bfhl \
-  -H "Content-Type: application/json" \
-  -d '{"lcm": [12,18,24]}'
+**Request:**
+```json
+{
+  "prime": [2,4,7,9,11]
+}
 ```
 
-Returns: `72`
-
-### Find HCF (Highest Common Factor)
-
-```bash
-curl -X POST http://localhost:3000/bfhl \
-  -H "Content-Type: application/json" \
-  -d '{"hcf": [24,36,60]}'
+**Response:**
+```json
+{
+  "is_success": true,
+  "official_email": "your_email@chitkara.edu.in",
+  "data": [2,7,11]
+}
 ```
 
-Returns: `12`
+### LCM
 
-### Ask AI a question
-
-```bash
-curl -X POST http://localhost:3000/bfhl \
-  -H "Content-Type: application/json" \
-  -d '{"AI": "What is the capital of Maharashtra?"}'
+**Request:**
+```json
+{
+  "lcm": [12,18,24]
+}
 ```
 
-Returns: `"Mumbai"`
+**Response:**
+```json
+{
+  "is_success": true,
+  "official_email": "your_email@chitkara.edu.in",
+  "data": 72
+}
+```
 
-## Deploying online
+### HCF
 
-Want to make your API publicly accessible? Here are some free options:
+**Request:**
+```json
+{
+  "hcf": [24,36,60]
+}
+```
 
-**Vercel** (easiest):
-1. Install Vercel CLI: `npm i -g vercel`
-2. Run `vercel` in your project folder
-3. Follow the prompts
-4. Add your environment variables in the Vercel dashboard
+**Response:**
+```json
+{
+  "is_success": true,
+  "official_email": "your_email@chitkara.edu.in",
+  "data": 12
+}
+```
 
-**Railway**:
-1. Push your code to GitHub
-2. Go to railway.app and create a new project
-3. Connect your GitHub repo
-4. Add environment variables in settings
-5. Deploy!
+### AI (Google Gemini)
 
-**Render**:
-1. Push to GitHub
-2. Create account at render.com
-3. New Web Service → connect your repo
-4. Set build command: `npm install`
-5. Set start command: `npm start`
-6. Add environment variables
-7. Deploy
+**Request:**
+```json
+{
+  "AI": "What is the capital of Maharashtra?"
+}
+```
 
-## Notes
+**Response:**
+```json
+{
+  "is_success": true,
+  "official_email": "your_email@chitkara.edu.in",
+  "data": "Mumbai"
+}
+```
 
-- The API only accepts one operation per request (you can't send both fibonacci and prime in the same request)
-- All responses include an `is_success` field so you know if it worked
-- Invalid requests return error messages with proper HTTP status codes
-- The AI feature needs a valid Gemini API key to work
+## ⚠️ Error Handling
+
+All errors return:
+```json
+{
+  "is_success": false,
+  "error": "Error description"
+}
+```
+
+### Common HTTP Status Codes
+
+- **400** → Invalid input / incorrect request format
+- **500** → Internal server or AI API failure
+
+## 🔐 Security & Validation
+
+- Input validation for all request types
+- Strict JSON body parsing limits
+- Helmet for secure HTTP headers
+- Environment-based secret management
+- Graceful failure handling (no crashes)
+
+## 🤖 AI Integration (Google Gemini)
+
+The AI functionality uses Google Gemini API to generate answers.
+Responses are sanitized to return a single-word output, ensuring compliance with evaluation rules.
+
+## 🚀 Deployment (Vercel)
+
+### Steps:
+
+1. Push project to a public GitHub repository
+2. Go to [https://vercel.com](https://vercel.com)
+3. Click **New Project**
+4. Import GitHub repository
+5. Add environment variables:
+   - `OFFICIAL_EMAIL`
+   - `GEMINI_API_KEY`
+6. Deploy 🚀
+
+## 🧪 Local Development
+
+```bash
+npm install
+node server.js
+```
+
+Server runs on:
+```
+http://localhost:3000
+```
+
+## 👤 Author
+
+- **Name:** Aditya Chawla
+- **University:** Chitkara University
+- **Email:** aditya1679.be23@chitkara.edu.in
+
+## 📄 License
+
+This project is created for academic evaluation purposes.
